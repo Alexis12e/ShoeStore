@@ -41,4 +41,10 @@ export class ProductsService {
       .where({ id })
       .update(body);
   }
+
+  async remove(id: number): Promise<Models.public_Product | null> {
+  return db.orm.public.Product
+    .where({ id })
+    .delete();
+}
 }
