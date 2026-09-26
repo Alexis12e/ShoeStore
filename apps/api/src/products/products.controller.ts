@@ -22,6 +22,11 @@ export class ProductsController {
     return this.productsService.findAll();
   }
 
+  @Get(':id')
+findOne(@Param('id', ParseIntPipe) id: number) {
+  return this.productsService.findOne(id);
+  }
+
   @Post()
   create(@Body() body: CreateProductDto) {
     return this.productsService.create(body);

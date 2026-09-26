@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { CreateProductDto } from './dto/create-product.dto.js';
 import { UpdateProductDto } from './dto/update-product.dto.js';
@@ -10,6 +10,18 @@ import type { Models } from '../prisma/contract.d.js';
 export class ProductsService {
   async findAll(): Promise<unknown[]> {
     return db.orm.public.Product.all();
+  }
+
+  async findOne(id: number): Promise<Models.public_Product> {
+    const product = await db.orm.public.Product
+      .where({ id })
+      .first();
+
+    if (!product) {
+      throw new NotFoundException('Producto no encontrado');
+    }
+
+    return product;
   }
 
   async create(body: CreateProductDto): Promise<Models.public_Product> {
