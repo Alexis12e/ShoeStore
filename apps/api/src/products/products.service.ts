@@ -33,18 +33,30 @@ export class ProductsService {
     });
   }
 
-  async update(
-    id: number,
-    body: UpdateProductDto,
-  ): Promise<Models.public_Product | null> {
-    return db.orm.public.Product
-      .where({ id })
-      .update(body);
+async update(
+  id: number,
+  body: UpdateProductDto,
+): Promise<Models.public_Product> {
+  const product = await db.orm.public.Product
+    .where({ id })
+    .update(body);
+
+  if (!product) {
+    throw new NotFoundException('Producto no encontrado');
   }
 
-  async remove(id: number): Promise<Models.public_Product | null> {
-  return db.orm.public.Product
+  return product;
+}
+
+async remove(id: number): Promise<Models.public_Product> {
+  const product = await db.orm.public.Product
     .where({ id })
     .delete();
+
+  if (!product) {
+    throw new NotFoundException('Producto no encontrado');
+  }
+
+  return product;
 }
 }
